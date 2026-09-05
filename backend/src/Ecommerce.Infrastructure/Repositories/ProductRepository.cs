@@ -17,14 +17,23 @@ public class ProductRepository : IProductRepository
     public async Task<IReadOnlyList<Product>> GetAllAsync()
     {
         return await _db.Products
+            .Include(p => p.Category)
             .Where(p => p.IsActive)
+            .OrderByDescending(p => p.UpdatedAt)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<Product?> GetByIdAsync(int id)
+    public async Task<Product?> GetByIdAsync(long id)
     {
-        return await _db.Products.FirstOrDefaultAsync(p => p.Id == id);
+        return await _db.Products
+            .Include(p => p.Category)
+            .FirstOrDefaultAsync(p => p.Id == id);
+    }
+
+    public async Task<bool> CategoryExistsAsync(int categoryId)
+    {
+        return await _db.Categories.AnyAsync(c => c.Id == categoryId);
     }
 
     public async Task<Product> AddAsync(Product product)

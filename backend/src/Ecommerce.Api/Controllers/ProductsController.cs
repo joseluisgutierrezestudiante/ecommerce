@@ -22,7 +22,7 @@ public class ProductsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<ProductResponseDto>> GetProduct(int id)
+    public async Task<ActionResult<ProductResponseDto>> GetProduct(long id)
     {
         var product = await _service.GetByIdAsync(id);
 
@@ -37,22 +37,25 @@ public class ProductsController : ControllerBase
     {
         var created = await _service.CreateAsync(dto);
 
+        if (created is null)
+            return BadRequest("La categoría especificada no existe.");
+
         return CreatedAtAction(nameof(GetProduct), new { id = created.Id }, created);
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateProduct(int id, UpdateProductDto dto)
+    public async Task<IActionResult> UpdateProduct(long id, UpdateProductDto dto)
     {
         var updated = await _service.UpdateAsync(id, dto);
 
         if (!updated)
-            return NotFound();
+            return NotFound("Producto no encontrado o categoría inválida.");
 
         return NoContent();
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteProduct(int id)
+    public async Task<IActionResult> DeleteProduct(long id)
     {
         var deleted = await _service.DeleteAsync(id);
 

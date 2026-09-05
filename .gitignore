@@ -1,0 +1,32 @@
+# .NET build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+*.user
+*.suo
+*.userprefs
+.vs/
+
+# Visual Studio Code
+.vscode/
+
+# Python (backend/app)
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Entornos / secretos locales
+.env
+*.local.json
+
+# Migraciones no aplicadas manualmente (se generan con dotnet ef)
+*.Production.json
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
